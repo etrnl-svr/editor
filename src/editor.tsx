@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { FC, useEffect, useState } from "react";
-import { useEditor, EditorContent, BubbleMenu } from "@tiptap/react";
+import { useEditor, EditorContent, BubbleMenu, FloatingMenu } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Helmet } from "react-helmet";
 import TextAlign from "@tiptap/extension-text-align";
@@ -802,13 +802,28 @@ const Editor: FC<Props> = ({
             </button>
           </div>
         )}
-
-        {editor && (
-          <Floatingbar
-            editor={editor}
-            openGalleryImageModal={openGalleryImageModal}
-          />
-        )}
+        
+        {editor && <FloatingMenu className="floating-menu" tippyOptions={{ duration: 100 }} editor={editor}>
+        <button
+          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+          className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
+        >
+          H1
+        </button>
+        <button
+          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+          className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
+        >
+          H2
+        </button>
+        <button
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
+          className={editor.isActive('bulletList') ? 'is-active' : ''}
+        >
+          Bullet List
+        </button>
+      </FloatingMenu>}
+        
         <EditorContent editor={editor} />
 
         <ImageModal
